@@ -1,32 +1,54 @@
 # Backend Documentation
 
-## Login/Sigup Page
+## Login Page
 
 summary: This page is used to login or signup to the system
 
-POST `/api/user/login`
-body: {
-    `user_name` : `str`
-    `password` : `str`
-}
+POST `"/api/user/login"`
+> Notes: This is used to login to the system
 
-response: 200
+```json
 {
-    `user_id` : `str`,
-    `success` : `bool`
+    "url": "/api/user/login",
+    "body":
+    {
+        "user_name": "str",
+        "password": "str"
+    },
+    "response":
+    {
+        "state": 200,
+        "body":
+        {
+            "user_id": "str",
+            "success": "bool"
+        }
+    }
 }
+```
 
-POST `/api/user/signup`
-body: {
-    `user_name` : `str`
-    `password` : `str`
-}
+## Sigup Page
 
-response: 200
+summary: This page is used to signup to the system
+
+POST `"/api/user/signup"`
+> Note: This is used to signup to the system
+
+```json
 {
-    `user_id` : `str`,
-    `success` : `bool`
+    "url": "/api/user/signup",
+    "body":
+    {
+        "user_name": "str",
+        "password": "str"
+    },
+    "response": 200
+    {
+        "user_id": "str",
+        "success": "bool"
+    }
 }
+```
 
 > Notes: Frontend should check password strength
 
@@ -34,131 +56,185 @@ response: 200
 
 summary: This page is used to display the **Total Amount** and **Friends List with Balance**
 
-GET `/api/user/balance/:id`
+GET `"/api/user/balance/:id"`
 
-response: 200
+```json
+"response": 200
 {
-    `balance` : `int`
+    "balance": "int"
 }
+```
 
-GET `/api/user/balance_list/:id`
+---
 
-response: 200
+GET `"/api/user/balance_list/:id"`
+
+```json
+"response": 200
 [
     {
-        `friend_id` : `str`,
-        `friend_name` : `str`,
-        `balance` : `int`,
-        `timestamp` : `date`
+        "friend_id": "str",
+        "friend_name": "str",
+        "balance": "int",
+        "timestamp": "date"
     }
 ]
+```
 
-## Friend Page
+## Friend History Page
 
-summary: This page is used to display the **Total Amount of a Friend** and **Transaction List with Balance** of a friend
+summary: This page is used to display the **Total Amount of a Friend** and **Transaction History with Balance** of a friend
 
-GET `/api/friend/balance/:uid/:fid/`
+GET `"/api/friend/balance/:uid/:fid"`
+> Notes: This is used to display the **Total Amount of a Friend**
 
-response: 200
+```json
+"response": 200
 {
-    `balance` : `int`,
+    "balance": "int",
 }
+```
 
-GET `/api/friend/balance_list/:uid/:fid/`
+---
 
-response: 200
+GET `"/api/friend/balance_list/:uid/:fid`"
+> Notes: This is used to display the **Transaction History** of a friend
+
+```json
+"response": 200
 [
     {
-        `transaction_id` : `str`,
-        `balance` : `int`,
-        `description` : `str`,
-        `timestamp` : `date`,
+        "transaction_id": "str",
+        "balance": "int",
+        "description": "str",
+        "timestamp": "date",
     }
 ]
+```
 
-## Transaction Page
+## Add Transaction Page
 
 summary: This page is used to display the **Transaction List** of a friend
 
-GET `/api/user/friends/:id/`
+GET `"/api/user/friends/:id/"`
+> Notes: This is used to display the **Friend List** of a user
 
+```json
 response: 200
 [
     {
-        `id` : `str`,
-        `name` : `str`
+        "id": "str", // friend id
+        "name": "str" // friend name
     }
 ]
+```
 
-GET `/api/user/groups/:id/`
+---
 
-response: 200
+GET `"/api/user/groups/:id/"`
+> Notes: This is used to display the **Group List** of a user
+
+```json
+"response": 200
 [
     {
-        `id` : `str`,
-        `name` : `str`,
-        `friends` : [
+        "id": "str", // group id
+        "name": "str", // group name
+        "friends":
+        [
             {
-                `id` : `str`,
-                `name` : `str`
+                "id": "str",
+                "name": "str"
             }
         ]
     }
 ]
+```
 
-POST `/api/user/group/:id`
-body {
-    `name` : `str`,
-    `friends` : [
+---
+
+POST `"/api/user/group/:id"`
+> Notes: This is used to create a new group
+
+```json
+{
+    "url": "/api/user/group/:id",
+    "body":
+    {
+        "name": "str", // group name
+        "friends":
+        [
+            {
+                "id": "str"
+            }
+        ]
+    },
+    "response": 200
+    [
         {
-            `id` : `str`
+            "id": "str",
+            "friends":
+            [
+                {
+                    "id": "str",
+                    "name": "str"
+                }
+            ]
         }
     ]
 }
+```
 
-response: 200
-[
-    {
-        `id` : `str`,
-        `friends` : [
+---
+
+POST `"/api/transaction/add/:id"`
+> Notes: This is used to create a new transaction
+
+```json
+{
+    "url": "/api/transaction/add/:id",
+    "body": {
+        "description": "str",
+        "transactions":
+        [
             {
-                `id` : `str`,
-                `name` : `str`
+                "id": "str", // group id
+                "friends":
+                [
+                    {
+                        "id": "str"
+                    }
+                ],
+                "amount": "int",
             }
         ]
+    },
+    "response": 200
+    {
+        "id": "str",
+        "success": "bool"
     }
-]
-
-POST `/api/transaction/add/:id`
-body {
-    `description` : `str`,
-    `transactions`: [
-        `id` : `str`,
-        `friends` : [
-            `id` : `str`
-        ],
-        `amount` : `int`,
-    ]
 }
-
-response: 200
-{
-    `id` : `str`,
-    `success` : `bool`
-}
+```
 
 ## Timeline Page
 
-summary: This page is used to display the **Transaction List** of a friend
+summary: This page is used to display the overall **Transaction List**
 
-GET `/api/user/timeline/:id/`
+GET `"/api/user/timeline/:id/"`
 
-response: 200
+```json
+"response": 200
 [
     {
-        `transaction_id` : `str`,
-        `friend_id` : `str`,
-        `balance` : `int`,
-        `timestamp` : `date`
+        "transaction_id": "str",
+        "friend_id": "str",
+        "balance": "int",
+        "timestamp": "date"
     }
 ]
+```
+
+## Pay Page
+
+summary: This page is similar to **Add Transaction Page** but it is used to pay a friend
